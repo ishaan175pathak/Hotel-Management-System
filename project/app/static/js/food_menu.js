@@ -36,11 +36,10 @@ let submitData = async (room_no, items_dictionary) => {
     let data = await result.json();
     data = JSON.parse(data);
     alert(data.status);
-    setTimeout(() => {
-      if (data.status === "received Data") {
-        fetch("http://127.0.0.1:8000/logout/");
-      }
-    }, 3000);
+    if (data.status === "received Data") {
+      fetch("http://127.0.0.1:8000/logout/");
+      window.location = "http://127.0.0.1:8000/";
+    }
   } catch (error) {
     alert("Error occured try again");
   }
