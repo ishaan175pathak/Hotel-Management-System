@@ -69,8 +69,11 @@
                         <li><a href="rooms/">Rooms</a></li>
                         <li><a href="about us/">About</a></li>
                         <li><a href="contact us/">Contact</a></li>
-                        <li><a href="reservation/">Reservation Form</a></li>
-                        <li><a href="book food/">Food Booking</a></li>
+                        <li><a href="login user/">Login</a></li>
+                        <!-- <li><a href="reservation/">Reservation Form</a></li> -->
+                        {% if request.user.is_authenticated %}
+                          <li><a href="book food/">Food Booking</a></li>
+                        {% endif %}
                       </ul>
                     </div>
                   </div>
@@ -345,18 +348,17 @@
             data-aos="fade-up"
             data-aos-delay="200"
           >
-            <div class="testimonial text-center slider-item">
-              <div class="author-image mb-3"></div>
-              <blockquote>
-                <p>
-                  &ldquo;It is a lovely place to stay, with clean and
-                  comfortable rooms, great facilities like fridge, T.V.,
-                  microwave, tea and coffee. The staff are very kind, cheerful
-                  and helpful.&rdquo;
-                </p>
-              </blockquote>
-              <p><em>&mdash; admin FLores</em></p>
-            </div>
+          {% for review in reviews %}
+          <div class="testimonial text-center slider-item">
+            <div class="author-image mb-3"></div>
+            <blockquote>
+              <p>
+                &ldquo;{{review.review}}&rdquo;
+              </p>
+            </blockquote>
+            <p><em>&mdash; {{review.user.customer.first_name}}</em></p>
+          </div>
+          {% endfor %} 
           </div>
           <!-- END slider -->
         </div>

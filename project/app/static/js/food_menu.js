@@ -11,7 +11,8 @@ let checkLists = () => {
 // sending the data to backend
 
 let submitData = async (room_no, items_dictionary) => {
-  console.log(items_dictionary);
+  alert(room_no);
+
   let body = {
     room_number: room_no,
     items: items_dictionary,
@@ -49,7 +50,9 @@ let submitData = async (room_no, items_dictionary) => {
 
 let generateReceipt = () => {
   let items_dictionary_list = new Array();
-  const room_number = room_no;
+
+  let room = document.getElementById("room_number");
+  let room_no = room.options[room.selectedIndex].value;
   let main_div = document.getElementById("OrderPlacementModal");
   let div = document.createElement("div");
   let table = document.createElement("table");
@@ -116,7 +119,7 @@ let generateReceipt = () => {
 
   let placeOrder = document.getElementById("placeOrder");
   placeOrder.onclick = () => {
-    submitData(room_number, items_dictionary_list);
+    submitData(room_no, items_dictionary_list);
   };
 };
 

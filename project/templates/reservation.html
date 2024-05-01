@@ -256,6 +256,15 @@
                   <span class="d-block">Email:</span>
                   <span> admin@gmail.com</span>
                 </p>
+                <p>
+                  <span class="d-block">QR:</span>
+                  <span>
+                    <img
+                      src="{{ STATIC_URL }}/static/img/payment_qr.jpeg"
+                      alt="QR"
+                      style="height: 400px; width: 400px"
+                  /></span>
+                </p>
               </div>
             </div>
           </div>
@@ -475,27 +484,13 @@
     <script src="{{ STATIC_URL }}/static/js/main.js"></script>
 
     <script>
-      let checkin_date = sessionStorage.getItem("check_in");
-      let checkout_date = sessionStorage.getItem("check_out");
-      let adults = sessionStorage.getItem("adults");
-      let children = sessionStorage.getItem("children");
-
-      let dateObj = new Date(checkin_date);
-      let c_date = `${dateObj.getFullYear()}-${dateObj.getMonth()}-${dateObj.getDate()}`;
-
-      document.getElementById("check_in").value = c_date;
-      document.getElementById("check_out").value = checkout_date;
-      document.getElementById("adults").value = adults;
-      document.getElementById("children").value = children;
-    </script>
-
-    <script>
       let context = "{{context}}";
 
       if (context == "success") {
         alert("Room booked Successfully");
 
         fetch("http://127.0.0.1:8000/logout/");
+        window.location = "http://127.0.0.1:8000/";
       }
     </script>
   </body>

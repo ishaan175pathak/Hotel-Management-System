@@ -84,7 +84,14 @@
     <header class="bg-dark text-light p-4">
       <h1 class="text-center">
         {{user_info}} <br />
-        Room Number {{room_number}}
+        <label for="room_number">Room Number</label>
+        <select name="room_number" id="room_number">
+          {% for room in room_number %}
+          <option value="{{room.room.room_number}}">
+            {{room.room.room_number}}
+          </option>
+          {% endfor %}
+        </select>
       </h1>
     </header>
 
@@ -165,7 +172,6 @@
       <!-- Add any other footer information here -->
     </footer>
     <script>
-      const room_no = "{{room_number}}";
       const user_info = "{{user_info}}";
     </script>
     <script

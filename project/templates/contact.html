@@ -131,25 +131,41 @@
         <div class="row">
           <div class="col-md-7" data-aos="fade-up" data-aos-delay="100">
             <form
-              action="#"
+              action=""
               method="post"
               class="bg-white p-md-5 p-4 mb-5 border"
             >
+              {% csrf_token %}
               <div class="row">
                 <div class="col-md-6 form-group">
                   <label for="name">Name</label>
-                  <input type="text" id="name" class="form-control" />
+                  <input
+                    type="text"
+                    id="name"
+                    class="form-control"
+                    value="{{name}}"
+                  />
                 </div>
                 <div class="col-md-6 form-group">
                   <label for="phone">Phone</label>
-                  <input type="text" id="phone" class="form-control" />
+                  <input
+                    type="text"
+                    id="phone"
+                    class="form-control"
+                    value="{{phone}}"
+                  />
                 </div>
               </div>
 
               <div class="row">
                 <div class="col-md-12 form-group">
                   <label for="email">Email</label>
-                  <input type="email" id="email" class="form-control" />
+                  <input
+                    type="email"
+                    id="email"
+                    class="form-control"
+                    value="{{email}}"
+                  />
                 </div>
               </div>
               <div class="row">
@@ -394,7 +410,16 @@
         </div>
       </div>
     </footer>
+    <script>
+      const context = "{{context}}";
 
+      if (context == "success") {
+        alert("Review successfully submitted");
+
+        fetch("http://127.0.0.1:8000/logout/");
+        window.location = "http://127.0.0.1:8000/";
+      }
+    </script>
     <script src="{{ STATIC_URL }}/static/js/jquery-3.3.1.min.js"></script>
     <script src="{{ STATIC_URL }}/static/js/jquery-migrate-3.0.1.min.js"></script>
     <script src="{{ STATIC_URL }}/static/js/popper.min.js"></script>

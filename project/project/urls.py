@@ -30,7 +30,7 @@ urlpatterns = [
     path('about us/', aboutUs),
     path('contact us/', contactUs),
     path('reservation/<str:room_number>/', reservation, name = "reservation"),
-    path('reviews/', review),
+    path('reviews/', review, name='review'),
     path('book food/', food),
     path('order food api/<int:room>', bookFood)
 ]

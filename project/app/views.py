@@ -15,13 +15,31 @@ from typing import List
 # Create your views here.
 
 def index(request):
-    return render(request, "index.html")
+    reviews = Review.objects.all()
+    return render(request, "index.html", {"reviews": reviews})
 
 def aboutUs(request):
     return render(request, "about.html")
 
+@login_required(login_url="/login user/")
 def contactUs(request):
-    return render(request, "contact.html")
+    user = User.objects.get(username = request.user)
+    customer = Customer.objects.get(customer = user)
+
+    if request.method == "GET":
+        return render(request, "contact.html", {"name":user.get_full_name(), "phone": customer.phone_number, "email": user.email})
+    
+    elif request.method == "POST":
+        review = request.POST.get("message")
+
+        try:
+            obj = Review(user = customer, review = review)
+            obj.save()
+
+            return render(request, "contact.html", {"context": "success"})
+        
+        except: 
+            return redirect("review")
 
 def login(request):
     if request.method == "GET":
@@ -40,7 +58,7 @@ def login(request):
             if url != "Not Available":
                 return redirect(url)
             
-            return redirect(reverse("login"))
+            return redirect(reverse("home"))
         
         else:
             return render(request, "login.html", {"context": "Try Again", "class": "alert alert-danger"})
@@ -56,17 +74,22 @@ def register(request):
         email = request.POST.get("email")
         
         try:
-            user, result = get_user_model().objects.get_or_create(username = username, password = password, email = email, first_name = firstName, last_name = lastName)
+            user, result = get_user_model().objects.get_or_create(username = username, email = email, first_name = firstName, last_name = lastName)
             
             if result:
+                user.set_password(password)
+                user.save()
                 customer = Customer(customer = user, phone_number = phone)
                 customer.save()
 
-            return redirect(reverse("login"))
+                return redirect(reverse("home"))
+            
+            return redirect("login")
         except:
             return render(request, "login.html", {"context": "try again", "class": "alert alert-danger"})
 
 @login_required(login_url="/login user/")
+
 def reservation(request, room_number: str):
     user = get_object_or_404(User, username = request.user)
     customer = get_object_or_404(Customer, customer = user)
@@ -80,12 +103,6 @@ def reservation(request, room_number: str):
         children = request.POST.get("children")
         check_in = request.POST.get("check_in")
         check_out = request.POST.get("check_out")
-
-        print(f"{room_number=}")
-        print(f"{adult=}")
-        print(f"{children=}")
-        print(f"{check_in=}")
-        print(f"{check_out=}")
 
         try:
             if Rooms.objects.filter(room_number = room_number):
@@ -111,8 +128,8 @@ def food(request):
         food_menu = Menu.objects.all()
         user = get_object_or_404(User, username = request.user)
         customer = get_object_or_404(Customer, customer = user)
-        bookedRoom = get_object_or_404(RoomBooking, customer = customer)
-        return render(request, "food_menu.html", {"menu": food_menu, "room_number": bookedRoom.room.room_number, "user_info": user.get_username()})
+        bookedRoom = RoomBooking.objects.filter(customer = customer)
+        return render(request, "food_menu.html", {"menu": food_menu, "room_number": bookedRoom, "user_info": user.get_username()})
 
 @csrf_exempt
 def bookFood(request, room: int):
